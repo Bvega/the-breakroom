@@ -2,17 +2,17 @@
 
 ## Last Updated
 - Date: 2026-07-12
-- Session: Initial Setup
+- Session: Phase 1 — Project Scaffold
 - Model: Claude Sonnet 4.6
 
 ## Current Phase
-- [ ] Phase 0 — Automation Layer (IN PROGRESS)
-- [ ] Phase 1 — Project Scaffold
+- [x] Phase 0 — Automation Layer ✅
+- [x] Phase 1 — Project Scaffold ✅
 - [ ] Phase 2 — Database Schema
-- [ ] Phase 3 — Privacy Auth (MANUAL GATE 🔒)
-- [ ] Phase 4 — Media Upload (MANUAL GATE 🔒)
+- [ ] Phase 3 — Privacy Auth (MANUAL GATE ���)
+- [ ] Phase 4 — Media Upload (MANUAL GATE ���)
 - [ ] Phase 5 — CultureSnap CRUD
-- [ ] Phase 6 — Anonymity Engine (MANUAL GATE 🔒)
+- [ ] Phase 6 — Anonymity Engine (MANUAL GATE ���)
 - [ ] Phase 7 — Feed Algorithm
 - [ ] Phase 8 — Engagement
 - [ ] Phase 9 — Moderation
@@ -23,12 +23,11 @@
 `main`
 
 ## Completed This Session
-- Initialized local Git repo
-- Connected to GitHub
-- Created .github/workflows directory
-- Created STATUS.md
+- Repo inicializado y conectado a GitHub
+- PR template + GitHub Actions workflows
+- Git hook provenance stamping
+- Backend: Express + health check en puerto 5000
+- Frontend: Vite + React + PWA plugin
 
 ## Next Action
-- Create STATUS auto-update GitHub Action
-- Create PR template
-- Create git hooks
+- Phase 2 — Database Schema (PostgreSQL)
