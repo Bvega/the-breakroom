@@ -1,0 +1,30 @@
+name: PR Enforcer
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [main]
+
+jobs:
+  enforce-pr-template:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check PR body completeness
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+
+            const required = [
+              '## Phase',
+              '## Tool Used',
+              '## What Changed',
+              '## Acceptance Criteria Met',
+            ];
+
+            const missing = required.filter(section => !body.includes(section));
+
+            if (missing.length > 0) {
+              core.setFailed('PR is missing required sections: ' + missing.join(', '));
+            }
