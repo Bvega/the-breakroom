@@ -1,0 +1,33 @@
+name: Update STATUS.md on PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  update-status:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update STATUS.md
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          TIME=$(date +'%H:%M UTC')
+          BRANCH=${{ github.head_ref }}
+          TITLE=${{ github.event.pull_request.title }}
+
+          sed -i "s/^- Date: .*/- Date: $DATE/" STATUS.md
+          sed -i "s/^- Session: .*/- Session: $TITLE/" STATUS.md
+          sed -i "s/^## Active Branch.*/## Active Branch\n\main\/" STATUS.md
+
+      - name: Commit STATUS.md update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add STATUS.md
+          git commit -m "chore: auto-update STATUS.md [skip ci]"
+          git push
