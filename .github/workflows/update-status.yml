@@ -1,33 +1,34 @@
 name: Update STATUS.md on PR Merge
-
 on:
   pull_request:
     types: [closed]
     branches: [main]
-
+permissions:
+  contents: write
 jobs:
   update-status:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
+        with:
+          ref: main
       - name: Update STATUS.md
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_BRANCH: ${{ github.head_ref }}
         run: |
           DATE=$(date +'%Y-%m-%d')
-          TIME=$(date +'%H:%M UTC')
-          BRANCH=${{ github.head_ref }}
-          TITLE=${{ github.event.pull_request.title }}
-
           sed -i "s/^- Date: .*/- Date: $DATE/" STATUS.md
-          sed -i "s/^- Session: .*/- Session: $TITLE/" STATUS.md
-          sed -i "s/^## Active Branch.*/## Active Branch\n\main\/" STATUS.md
-
+          sed -i "s/^- Session: .*/- Session: ${PR_TITLE//\//-}/" STATUS.md
+          PHASE=$(echo "$HEAD_BRANCH" | grep -oP 'phase/\K[0-9]+' | sed 's/^0*//' || true)
+          if [ -n "$PHASE" ]; then
+            sed -i "s/^- \[ \] Phase $PHASE /- [x] Phase $PHASE /" STATUS.md
+          fi
       - name: Commit STATUS.md update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add STATUS.md
-          git commit -m "chore: auto-update STATUS.md [skip ci]"
+          git diff --cached --quiet || git commit -m "chore: auto-update STATUS.md [skip ci]"
           git push
